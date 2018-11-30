@@ -9,51 +9,37 @@ import unittest, time, re
 
 class UntitledTestCase(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
-        self.base_url = "https://www.katalon.com/"
-        self.verificationErrors = []
-        self.accept_next_alert = True
+        self.wd = webdriver.Firefox()
+        self.wd.implicitly_wait(30)
+
     
     def test_untitled_test_case(self):
-        driver = self.driver
-        driver.get("http://localhost/addressbook/")
-        driver.find_element_by_link_text("addressbook/").click()
-        driver.find_element_by_xpath("//body").click()
-        driver.find_element_by_name("user").click()
-        driver.find_element_by_name("user").clear()
-        driver.find_element_by_name("user").send_keys("admin")
-        driver.find_element_by_id("LoginForm").click()
-        driver.find_element_by_name("pass").click()
-        driver.find_element_by_name("pass").clear()
-        driver.find_element_by_name("pass").send_keys("secret")
-        driver.find_element_by_id("LoginForm").submit()
+        wd = self.wd
+        wd.get("http://localhost/addressbook/")
+        wd.find_element_by_link_text("addressbook/").click()
+        wd.find_element_by_xpath("//body").click()
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").clear()
+        wd.find_element_by_name("user").send_keys("admin")
+        wd.find_element_by_id("LoginForm").click()
+        wd.find_element_by_name("pass").click()
+        wd.find_element_by_name("pass").clear()
+        wd.find_element_by_name("pass").send_keys("secret")
+        wd.find_element_by_id("LoginForm").submit()
         # ERROR: Caught exception [ERROR: Unsupported command [selectWindow | win_ser_local | ]]
     
     def is_element_present(self, how, what):
-        try: self.driver.find_element(by=how, value=what)
+        try: self.wd.find_element(by=how, value=what)
         except NoSuchElementException as e: return False
         return True
     
     def is_alert_present(self):
-        try: self.driver.switch_to_alert()
+        try: self.wd.switch_to_alert()
         except NoAlertPresentException as e: return False
         return True
-    
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.driver.switch_to_alert()
-            alert_text = alert.text
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert_text
-        finally: self.accept_next_alert = True
-    
+
     def tearDown(self):
-        self.driver.quit()
-        self.assertEqual([], self.verificationErrors)
+        self.wd.quit()
 
 if __name__ == "__main__":
     unittest.main()
